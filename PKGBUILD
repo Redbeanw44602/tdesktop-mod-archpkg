@@ -3,8 +3,8 @@
 
 pkgname=telegram-desktop
 pkgver=6.5.1
-pkgrel=1
-pkgdesc='Official Telegram Desktop client'
+pkgrel=2
+pkgdesc='Official Telegram Desktop client [MOD]'
 arch=('x86_64')
 url="https://desktop.telegram.org/"
 license=('GPL-3.0-or-later WITH OpenSSL-exception')
@@ -60,11 +60,15 @@ optdepends=(
 )
 _td_commit=6d74326c5ce53aeb52496f157f0080d9b8515970
 source=(
-  "https://github.com/telegramdesktop/tdesktop/releases/download/v${pkgver}/tdesktop-${pkgver}-full.tar.gz"
+  "git+https://github.com/Redbeanw44602/tdesktop-mod.git#tag=v${pkgver}-mod"
   "git+https://github.com/tdlib/td.git#tag=${_td_commit}"
 )
-sha512sums=('b4b2e3cb580157067ccb4624da1e87d627ca55ded8e3bf2a0b3cbd0c9ee857eee498e6f4649f5769a6d80c6cfbaf47fe3435f0b0f9273c07ad7afaa424e1acd6'
+sha512sums=('2b4cef15e22b9ebec13a3d56f7177bdbd88f584dca09029a4c5b8be81519143e89d6e7767c4b73b142f58e131352b41fbee1db85b40985a3948b1a4ef7b8f53b'
             '6dc6e684a0bf35bb83f6fa6579a0da82d604190b222f2cd2de9b8ef5b93f5f18ac9a8733e2c5cf2a64ed9933b346ea31e26a4bcc0039956280ec2deef9649457')
+
+prepare() {
+  cd tdesktop-mod && git submodule update --init --recursive
+}
 
 build() {
   CXXFLAGS+=' -ffat-lto-objects'
@@ -81,7 +85,7 @@ build() {
   # their snap builds:
   # https://github.com/telegramdesktop/tdesktop/blob/8fab9167beb2407c1153930ed03a4badd0c2b59f/snap/snapcraft.yaml#L87-L88
   # Thanks @primeos!
-  cmake -B build -S tdesktop-$pkgver-full -G Ninja \
+  cmake -B build -S tdesktop-mod -G Ninja \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DCMAKE_INSTALL_PREFIX="/usr" \
     -Dtde2e_DIR="$PWD/td/install/lib/cmake/tde2e" \
