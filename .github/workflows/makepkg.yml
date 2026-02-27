@@ -1,0 +1,58 @@
+name: Build
+
+on:
+# push:
+  workflow_dispatch:
+
+env:
+  CONTAINER: archlinux-container
+  NON_ROOT_USER: im_not_root
+  USER_HOME: /home/im_not_root
+
+jobs:
+  makepkg:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Create swap
+        run: |
+          sudo fallocate -l 37G /swapfile_ext
+          sudo chmod 600 /swapfile_ext
+          sudo mkswap /swapfile_ext
+          sudo swapon /swapfile_ext
+
+      - name: Setup container
+        run: |
+          docker pull archlinux:latest
+          docker run -v "$GITHUB_WORKSPACE":/gh_workspace -d --name $CONTAINER archlinux:latest tail -f /dev/null
+
+      - name: Create non-root user
+        run: |
+          docker exec $CONTAINER useradd -m -U -s /bin/bash $NON_ROOT_USER
+          docker exec $CONTAINER sh -c "cp -R /gh_workspace/* $USER_HOME"
+          docker exec $CONTAINER chown -R $NON_ROOT_USER:$NON_ROOT_USER $USER_HOME
+
+      - name: Make pacman can SUDO
+        run: |
+          docker exec $CONTAINER sh -c "echo \"$NON_ROOT_USER ALL=(ALL:ALL) NOPASSWD: ALL\" >> /etc/sudoers"
+
+      - name: Make package
+        run: |
+          docker exec $CONTAINER pacman -Syu --noconfirm
+          docker exec $CONTAINER pacman -S base-devel --noconfirm
+          docker exec -u $NON_ROOT_USER -w $USER_HOME $CONTAINER makepkg --cleanbuild --syncdeps --log --noconfirm
+
+      - name: Copy artifact
+        run: |
+          for file in $(docker exec -u $NON_ROOT_USER -w $USER_HOME $CONTAINER sh -c 'find . -maxdepth 1 -name "*.pkg.tar.*"'); do
+              docker cp $CONTAINER:"$USER_HOME/$file" $GITHUB_WORKSPACE
+          done
+  
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: arch-packages
+          path: '*.pkg.tar.*'
