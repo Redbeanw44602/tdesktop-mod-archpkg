@@ -2,7 +2,7 @@
 # Contributor: hexchain <i@hexchain.org>
 
 pkgname=telegram-desktop
-pkgver=6.5.1
+pkgver=6.6.2
 pkgrel=2
 pkgdesc='Official Telegram Desktop client [MOD]'
 arch=('x86_64')
@@ -58,21 +58,19 @@ optdepends=(
   'webkitgtk-6.0: embedded browser features provided by webkitgtk-6.0 (Wayland only)'
   'xdg-desktop-portal: desktop integration'
 )
-_td_commit=6d74326c5ce53aeb52496f157f0080d9b8515970
+_td_commit=af0cb1d30a1e5cb1a10cd83b48998ca9ea9ce249
 source=(
   "git+https://github.com/Redbeanw44602/tdesktop-mod.git#tag=v${pkgver}-mod"
   "git+https://github.com/tdlib/td.git#tag=${_td_commit}"
 )
-sha512sums=('2b4cef15e22b9ebec13a3d56f7177bdbd88f584dca09029a4c5b8be81519143e89d6e7767c4b73b142f58e131352b41fbee1db85b40985a3948b1a4ef7b8f53b'
-            '6dc6e684a0bf35bb83f6fa6579a0da82d604190b222f2cd2de9b8ef5b93f5f18ac9a8733e2c5cf2a64ed9933b346ea31e26a4bcc0039956280ec2deef9649457')
+sha512sums=('91f96bad44af1cb648831a4e07e135f2b46d1e539fd01f5f081fbeecb4a83fad38e156cf66bcdd63e8245c6651d0cb632647209266699d5bd1c4a2db572170a9'
+            '9b5a0af914b9d8f9aaa44117531a268caf89665728d75ff2b6380320826b2fd5f2197d663e5230553119d0b539ebca98e20dd165bc8bafe3bd23f0a209ccfa5a')
 
 prepare() {
   cd tdesktop-mod && git submodule update --init --recursive
 }
 
 build() {
-  CXXFLAGS+=' -ffat-lto-objects'
-
   cmake -S td -B td/build \
     -DCMAKE_BUILD_TYPE=None \
     -DCMAKE_INSTALL_PREFIX="$PWD/td/install" \
