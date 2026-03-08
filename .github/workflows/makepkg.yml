@@ -1,7 +1,9 @@
 name: Build
 
 on:
-# push:
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 env:
@@ -12,6 +14,8 @@ env:
 jobs:
   makepkg:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -56,3 +60,10 @@ jobs:
         with:
           name: arch-packages
           path: '*.pkg.tar.*'
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          files: '*.pkg.tar.*'
+
