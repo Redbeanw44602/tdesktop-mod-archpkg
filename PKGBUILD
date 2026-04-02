@@ -70,8 +70,8 @@ sha512sums=('b326e87e584f0e97a2d6ed6958045c59f3b21a5adbeeaf909e7440fb5113099f77d
             'd9765588e92f154d83b95dc2840207bf22b26b6ca37b4d5cdfdb5e27a00c9e1ebcc9cd475a96bbcc5b02c24f6892320e009f843aa6b172a1820814b952a772eb')
 
 prepare() {
-  patch -Np1 -d tdesktop-mod/Telegram/lib_base -i "$srcdir"/tdesktop-fix-minizip-includes.patch
   cd tdesktop-mod && git submodule update --init --recursive
+  patch -Np1 -d Telegram/lib_base -i "$srcdir"/tdesktop-fix-minizip-includes.patch
 }
 
 build() {
