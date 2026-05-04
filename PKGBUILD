@@ -2,7 +2,7 @@
 # Contributor: hexchain <i@hexchain.org>
 
 pkgname=telegram-desktop
-pkgver=6.7.6
+pkgver=6.7.8
 pkgrel=2
 pkgdesc='Official Telegram Desktop client [MOD]'
 arch=('x86_64')
@@ -19,9 +19,15 @@ depends=(
   'libavif'
   'libdispatch'
   'libheif'
+  'libjpeg-turbo'
   'libjxl'
+  'libpipewire'
+  'libxcb'
   'libxcomposite'
   'libxdamage'
+  'libxext'
+  'libxfixes'
+  'libxkbcommon'
   'libxrandr'
   'libxtst'
   'lz4'
@@ -31,6 +37,7 @@ depends=(
   'openssl'
   'pipewire'
   'protobuf'
+  'qt6-base'
   'qt6-imageformats'
   'qt6-svg'
   'qt6-wayland'
@@ -65,7 +72,7 @@ source=(
   "git+https://github.com/tdlib/td.git#tag=${_td_commit}"
   tdesktop-fix-minizip-includes.patch
 )
-sha512sums=('00ec1ad8e30b88aacd5b1869a2268f1364042142bef73a698e289e823b396e66340915cee5823a409e51909b59a521369643828ab6b9884b38c4e407430b1c09'
+sha512sums=('a6a030a2c6a5f4209aa091dca60cac326392adb11f8b6a54dd8667f0c1b26fc10a9cad44ff3251d9d98c1553bef05ed5703f4c698f79583070f7282594e0d4c5'
             'd622b8f3580ee49415546d025c4ba45f5b2de50b315fc379dc57c0427c5f815c7cc3820cca937c12182ee461641bb61f87ebc99b6c74a1a666cea9a08f0f41a0'
             'd9765588e92f154d83b95dc2840207bf22b26b6ca37b4d5cdfdb5e27a00c9e1ebcc9cd475a96bbcc5b02c24f6892320e009f843aa6b172a1820814b952a772eb')
 
