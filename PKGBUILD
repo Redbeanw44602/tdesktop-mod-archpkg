@@ -2,8 +2,8 @@
 # Contributor: hexchain <i@hexchain.org>
 
 pkgname=telegram-desktop
-pkgver=6.7.8
-pkgrel=2
+pkgver=6.8.2
+pkgrel=4
 pkgdesc='Official Telegram Desktop client [MOD]'
 arch=('x86_64')
 url="https://desktop.telegram.org/"
@@ -66,22 +66,19 @@ optdepends=(
   'webkitgtk-6.0: embedded browser features provided by webkitgtk-6.0 (Wayland only)'
   'xdg-desktop-portal: desktop integration'
 )
-_td_commit=51743dfd01dff6179e2d8f7095729caa4e2222e9
+_td_commit=49b3bcbb6bfebf2ed44dd9f25102d2e1a94a58c4
 source=(
   "git+https://github.com/Redbeanw44602/tdesktop-mod.git#tag=v${pkgver}-mod"
   "git+https://github.com/tdlib/td.git#tag=${_td_commit}"
   tdesktop-fix-minizip-includes.patch
-  tdesktop-fix-cstdint-gcc16-includes.patch
 )
-sha512sums=('a6a030a2c6a5f4209aa091dca60cac326392adb11f8b6a54dd8667f0c1b26fc10a9cad44ff3251d9d98c1553bef05ed5703f4c698f79583070f7282594e0d4c5'
-            'd622b8f3580ee49415546d025c4ba45f5b2de50b315fc379dc57c0427c5f815c7cc3820cca937c12182ee461641bb61f87ebc99b6c74a1a666cea9a08f0f41a0'
-            'd9765588e92f154d83b95dc2840207bf22b26b6ca37b4d5cdfdb5e27a00c9e1ebcc9cd475a96bbcc5b02c24f6892320e009f843aa6b172a1820814b952a772eb'
-            '1b9543048f37e308cec86087a09b34d4800498f0b76854f7ebe182d24b75fe7d7fb7ba5b64b45be6bf055a7e327ac6a35706f9f0c42986ba6f598030ba836654')
+sha512sums=('d21ab5e47b6296409399ac40d52dfb4a2836aa20d96b744dc449d8dbf01d4bea94fbe1ef8d0da0f9517e0c0b4a1ea6f9afe8eed1c4e2741b5fc3296144ffc4a7'
+            'f8f98b02b1c7d1ca9162c4867461605fa7a5ab449ac53701877f49ba393ff4a495a58984538fe3960c7090ab5b3749666b4d169058f5e40f8d35ea4c15aea8d5'
+            'd9765588e92f154d83b95dc2840207bf22b26b6ca37b4d5cdfdb5e27a00c9e1ebcc9cd475a96bbcc5b02c24f6892320e009f843aa6b172a1820814b952a772eb')
 
 prepare() {
   cd tdesktop-mod && git submodule update --init --recursive
   patch -Np1 -d Telegram/lib_base -i "$srcdir"/tdesktop-fix-minizip-includes.patch
-  patch -Np1 -d Telegram/ThirdParty/tgcalls -i "$srcdir"/tdesktop-fix-cstdint-gcc16-includes.patch
 }
 
 build() {
